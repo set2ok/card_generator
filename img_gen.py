@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
-import card_loader
+import card_load
 import random
 import math
 import cv2
