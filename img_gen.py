@@ -1,22 +1,24 @@
 from PIL import Image, ImageDraw, ImageFont
-import card_load
+import CardGenerator
 import random
 import math
 import cv2
 import numpy as np
 
 class ImageGen:
+    """
+    A class to generate images with text drawn inside colored boxes.
+    Input the path to the question csv file.
+    Attributes:
+        img_path (str): Path to the base image.
+
+    """
 
     def __init__(self, question_path):
-        self.res1 = self.cm_to_resolution(8.9, 5.7, 300)
-        self.res2 = self.cm_to_resolution(9.2, 5.9, 300)
-        self.res3 = self.cm_to_resolution(8.8, 6.3, 300)
+        # question_path is path to csv file with questions and answers
 
-        self.res_list = [self.res1, self.res2, self.res3]
-
+        # path for base picture
         self.img_path ="picture.png"
-
-        self.resolution = self.cm_to_resolution(8.9, 5.7, 300)
 
         self.card_list = CardGenerator.load_cards_from_file(question_path)
         self.get_boxes()
@@ -33,14 +35,16 @@ class ImageGen:
         for key in self.colors.keys():
             self.boxes[key] = self.get_box(self.colors[key][0],self.colors[key][1])
 
-
-
-    def cm_to_resolution(self,x,y,dpi):
-        return (round(x*0.3937008*dpi), round(y*0.3937008*dpi))
-
     def draw_cards(self, path):
+        """
+        Draws cards with questions and answers onto images and saves them to the specified path.
+        :param path: path to save images
+        :return:
+        """
 
         for i,card in enumerate(self.card_list):
+            if card.kategori == "" or card.fråga == "":
+                continue
             self.img = Image.open(self.img_path)
             self.draw = ImageDraw.Draw(self.img)
             self.width, self.height = self.img.size
